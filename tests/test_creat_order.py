@@ -4,6 +4,8 @@ import allure
 import pytest
 import requests
 
+from data import url, orders
+
 
 class TestCreatOrder:
     @pytest.mark.parametrize('color', ['BLACK', 'GREY', ''])
@@ -21,6 +23,5 @@ class TestCreatOrder:
             "color": color
         }
         payload_string = json.dumps(payload)
-        response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/orders',
-                                 data=payload_string)
+        response = requests.post(url+orders, data=payload_string)
         assert response.status_code == 201 and 'track' in response.json()

@@ -3,6 +3,8 @@ import json
 import allure
 import requests
 
+from data import url, orders
+
 
 class TestListOfOrders:
     @allure.title('Получение списка заказов')
@@ -14,6 +16,5 @@ class TestListOfOrders:
             "page": 12
         }
         payload_string = json.dumps(payload)
-        response = requests.get('https://qa-scooter.praktikum-services.ru/api/v1/orders',
-                                data=payload_string)
+        response = requests.get(url+orders, data=payload_string)
         assert response.status_code == 200 and 'orders' in response.json()

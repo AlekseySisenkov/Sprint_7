@@ -1,6 +1,8 @@
 import allure
 import requests
 
+from data import url, courier
+
 
 class TestCreatCourier:
     @allure.title('Проверка создания курьера')
@@ -10,8 +12,7 @@ class TestCreatCourier:
             "password": generate_password,
             "firstName": generate_firstName
         }
-        response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/courier',
-                                 data=payload)
+        response = requests.post(url+courier, data=payload)
         assert response.status_code == 201 and response.json()['ok'] == True
 
     @allure.title('Проверка дубля курьера')
@@ -21,10 +22,8 @@ class TestCreatCourier:
             "password": generate_password,
             "firstName": generate_firstName
         }
-        response1 = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/courier',
-                                  data=payload)
-        response2 = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/courier',
-                                  data=payload)
+        response1 = requests.post(url+courier, data=payload)
+        response2 = requests.post(url+courier, data=payload)
         assert response2.status_code == 409 and response2.json()["message"] == ("Этот логин уже используется. "
                                                                                 "Попробуйте другой.")
 
@@ -34,8 +33,7 @@ class TestCreatCourier:
             "password": generate_password,
             "firstName": generate_firstName
         }
-        response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/courier',
-                                 data=payload)
+        response = requests.post(url+courier, data=payload)
         assert response.status_code == 400 and response.json()["message"] == ('Недостаточно данных для '
                                                                               'создания учетной записи')
 
@@ -45,7 +43,6 @@ class TestCreatCourier:
             "login": generate_login,
             "firstName": generate_firstName
         }
-        response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/courier',
-                                 data=payload)
+        response = requests.post(url+courier, data=payload)
         assert response.status_code == 400 and response.json()["message"] == ('Недостаточно данных для создания '
                                                                               'учетной записи')

@@ -1,6 +1,8 @@
 import allure
 import requests
 
+from data import url, courier, login
+
 
 class TestLoginCourier:
     @allure.title('Проверка успешного входа существующего курьера')
@@ -9,8 +11,7 @@ class TestLoginCourier:
             "login": current_login_password[0],
             "password": current_login_password[1]
         }
-        response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/courier/login',
-                                 data=payload)
+        response = requests.post(url+courier+login, data=payload)
         assert response.status_code == 200 and 'id' in response.json()
 
     @allure.title('Проверка входа курьера без логина')
@@ -19,8 +20,7 @@ class TestLoginCourier:
             "login": '',
             "password": current_login_password[1]
         }
-        response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/courier/login',
-                                 data=payload, timeout=10)
+        response = requests.post(url+courier+login, data=payload, timeout=10)
         assert response.status_code == 400 and response.json()["message"] == 'Недостаточно данных для входа'
 
     @allure.title('Проверка входа курьера без пароля')
@@ -29,8 +29,7 @@ class TestLoginCourier:
             "login": current_login_password[0],
             "password": ''
         }
-        response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/courier/login',
-                                 data=payload, timeout=10)
+        response = requests.post(url+courier+login, data=payload, timeout=10)
         assert response.status_code == 400 and response.json()["message"] == 'Недостаточно данных для входа'
 
     @allure.title('Проверка входа курьера несуществующей парой логин-пароль')
@@ -39,6 +38,5 @@ class TestLoginCourier:
             "login": "incorrect_login",
             "password": 'incorrect_password'
         }
-        response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/courier/login',
-                                 data=payload, timeout=10)
+        response = requests.post(url+courier+login, data=payload, timeout=10)
         assert response.status_code == 404 and response.json()["message"] == 'Учетная запись не найдена'
